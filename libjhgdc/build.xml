@@ -1,0 +1,51 @@
+<project name="libjhgdc" default="compile" basedir=".">
+    <description>
+        libjhgdc build file
+    </description>
+
+    <!-- set global properties for this build -->
+    <property name="src.dir"      value="src"/>
+    <property name="build.dir"    value="build"/>
+    <property name="classes.dir"  value="${build.dir}/classes"/>
+    <property name="jar.dir"      value="${builddir}/jar"/>
+    <property name="src.version"  value="0.1-current"/>
+  
+    <property name="javadoc.dir"      value="${build.dir}/doc/api"/>
+    <property name="javadoc.doctitle" value="libjhgdc Java HGD client library"/>
+    <property name="javadoc.bottom"   value="Copyright &amp;copy; 2011 Carlos Eduardo da Silva."/>
+    <property name="javadoc.packages" value="jhgdc"/>
+    
+
+    <target name="clean" description="clean up">
+        <delete dir="${build.dir}" />
+    </target>
+
+    <target name="compile" description="compile the source">
+        <mkdir dir="${classes.dir}" />
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" />
+    </target>
+
+    <target name="jar" depends="compile" description="generate the distribution">
+        <mkdir dir="${jar.dir}"/>
+        <jar jarfile="${jar.dir}/${ant.project.name}-${src.version}.jar" 
+             basedir="${classes.dir}" />
+    </target>
+
+    <target name="clean-build" depends="clean,jar"/>
+
+
+    <target name="javadoc">
+        <mkdir dir="${javadoc.dir}"/>
+        <javadoc sourcepath="${src.dir}"
+                 protected="true"
+                 destdir="${javadoc.dir}"
+                 author="true"
+                 version="true"
+                 use="true"
+                 windowtitle="${javadoc.doctitle}"
+                 bottom="${javadoc.bottom}">
+            <package name="**.*"/>
+        </javadoc>
+    </target>
+
+</project>

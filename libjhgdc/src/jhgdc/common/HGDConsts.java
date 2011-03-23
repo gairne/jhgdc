@@ -7,34 +7,13 @@ public final class HGDConsts {
 	 * This class is based on hgd.h 
 	 */
 	
-	//#define HGD_VERSION "0.3-current"
-	public static final String VERSION = "0.3-current"; 
+	public static final String VERSION = "0.1.0"; 
 
-	/* paths */
-	//#define HGD_DFL_DIR "/var/hgd"
-	public static final String DEFAULT_DIR = "/var/hgd";
-	
-	//#define HGD_DB_NAME "hgd.db"
-	public static final String DB_NAME = "hgd.db";
-	
-	//#define HGD_MPLAYER_PID_NAME "mplayer.pid"
-	public static final String MPLAYER_PID_NAME = "mplayer.pid";
-	
-	//#define HGD_FILESTORE_NAME "files"
-	public static final String FILESTORE_NAME = "files";
-	
-	//#define HGD_DFL_SVR_CONF_DIR "/etc/hgd"
-	public static final String DEFAULT_SERVER_CONFIG_DIR = "/etc/hgd";
-	
-	
 	/* networking */
 	public static final String DEFAULT_HOST = "127.0.0.1";
 	
 	//#define HGD_DFL_PORT 6633
 	public static final int DEFAULT_PORT = 6633;
-	
-	//#define HGD_DFL_BACKLOG 10
-	public static final int DEFAULT_BACKLOG = 10;
 	
 	//#define HGD_DFL_MAX_UPLOAD (1024 * 1024 * 100)
 	public static final int DEFAULT_MAX_UPLOAD = (1024 * 1024 * 100);
@@ -54,12 +33,6 @@ public final class HGDConsts {
 	//#define HGD_MAX_PROTO_TOKS 3
 	public static final int MAX_PROTO_TOKS = 3;
 	
-	//#define HGD_GREET "ok|HGD-" HGD_VERSION
-	public static final String GREETING = "ok|JHGD" + VERSION;
-	
-	//#define HGD_BYE "ok|Catch you later d00d!"
-	public static final String BYE = "ok|Catch you later d00d!";
-
 	/* SSL */
 	//#define HGD_DFL_KEY_FILE HGD_DFL_SVR_CONF_DIR "/privkey.key"
 	

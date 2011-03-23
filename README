@@ -1,1 +1,29 @@
 jhgdc - Java library and client for HGD
+=======================================
+
+The jhgdc project has the aim of developing a Java library client
+and a simple Java command line client for the HGD (Hackaton Gunther Daemon).
+
+
+Documentation
+-------------
+
+Since the repository contains several packages, each package contains 
+its own README file with build and use instructions.
+
+
+Package contents
+----------------
+
+  * libjhgdc -- The library itself
+
+
+
+Prerequisites
+-------------
+
+To build, you will need:
+
+  * Java SE 6
+
+

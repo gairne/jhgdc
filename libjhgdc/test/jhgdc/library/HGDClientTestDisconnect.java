@@ -18,22 +18,24 @@
  *  along with libjhgdc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jhgdc;
+package jhgdc.library;
 
 
-import jhgdc.common.HGDConsts;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
- * This class contains the test cases of the login command.
+ * This class contains the test cases for the disconnection command.
  *
  * @author Carlos Eduardo da Silva
  * @version 0.1.0
  *
  */
-public class HGDClientTestLogin {
+public class HGDClientTestDisconnect {
 
 	/**
 	 * The client.
@@ -52,15 +54,30 @@ public class HGDClientTestLogin {
 	}
 
 	/**
-	 * Disconnects the client, in case it is still connected at
-	 * the end of the test case.
+	 * Sets the client to null.
 	 * @throws java.lang.Exception
 	 */
 	@After
 	public void tearDown() throws Exception {
-		if (client.isConnected())
+		client = null;
+	}
+
+	@Test
+	public void testDisconnect() {
+		try {
 			client.disconnect(true);
+			assertFalse("Client still connected", client.isConnected());
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 	}
 	
-
+	@Test (expected=IllegalStateException.class)
+	public void testDisconnectIllegaState() throws Exception {
+		client.disconnect(true);
+		assertFalse("Client still connected", client.isConnected());
+		
+		client.disconnect(true);
+		fail("IllegalStateException not thrown");
+	}
 }

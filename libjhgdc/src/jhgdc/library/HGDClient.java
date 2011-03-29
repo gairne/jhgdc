@@ -18,7 +18,7 @@
  *  along with libjhgdc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jhgdc;
+package jhgdc.library;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -31,9 +31,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-
-import jhgdc.common.HGDConsts;
-import jhgdc.common.JHGDException;
 
 /**
  * This class implements a HGD client.
@@ -50,7 +47,7 @@ import jhgdc.common.JHGDException;
  * HGD daemon.
  * 
  * @author Carlos Eduardo da Silva
- * @version 22/03/2011
+ * @since 22/03/2011
  *
  */
 public class HGDClient {

@@ -18,7 +18,7 @@
  *  along with libjhgdc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jhgdc;
+package jhgdc.library;
 
 
 import static org.junit.Assert.assertFalse;
@@ -26,8 +26,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
-
-import jhgdc.common.HGDConsts;
 
 import org.junit.After;
 import org.junit.Before;

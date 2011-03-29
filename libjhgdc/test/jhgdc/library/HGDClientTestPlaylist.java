@@ -18,11 +18,11 @@
  *  along with libjhgdc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package jhgdc;
+package jhgdc.library;
 
 
-import static org.junit.Assert.*;
-import jhgdc.common.HGDConsts;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.Before;

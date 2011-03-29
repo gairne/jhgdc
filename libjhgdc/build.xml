@@ -7,8 +7,8 @@
     <property name="src.dir"      value="src"/>
     <property name="build.dir"    value="build"/>
     <property name="classes.dir"  value="${build.dir}/classes"/>
-    <property name="jar.dir"      value="${builddir}/jar"/>
-    <property name="src.version"  value="0.1-current"/>
+    <property name="jar.dir"      value="${build.dir}/jar"/>
+    <property name="src.version"  value="0.0-current"/>
   
     <property name="javadoc.dir"      value="${build.dir}/doc/api"/>
     <property name="javadoc.doctitle" value="libjhgdc Java HGD client library"/>

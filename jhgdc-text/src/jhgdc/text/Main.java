@@ -55,6 +55,16 @@ public class Main {
 		System.out.println("jhgdc-text Version 0.1");
 	}
 	
+	private static void processCommand(String[] args) {
+		//Ask factory to create the command
+		
+		//Validate the arguments
+		
+		//Execute the command
+		
+		//Get result
+	}
+	
 	/**
 	 * @param args
 	 */
@@ -63,7 +73,7 @@ public class Main {
 		//Options
 		CmdLineParser.Option help = parser.addBooleanOption('h', "help");
 		CmdLineParser.Option port = parser.addIntegerOption('p', "port");
-		CmdLineParser.Option host = parser.addStringOption('h', "host");
+		CmdLineParser.Option server = parser.addStringOption('s', "server");
 		CmdLineParser.Option username = parser.addStringOption('u', "username");
 		CmdLineParser.Option version = parser.addBooleanOption('v', "version");
 				
@@ -78,7 +88,7 @@ public class Main {
 		Boolean helpValue = (Boolean)parser.getOptionValue(help, Boolean.FALSE);
 		Integer portValue = (Integer)parser.getOptionValue(port, 
 				new Integer(HGDConsts.DEFAULT_PORT));
-		String hostValue = (String)parser.getOptionValue(host);
+		String hostValue = (String)parser.getOptionValue(server);
 		String usernameValue = (String)parser.getOptionValue(username);
 		Boolean versionValue = (Boolean)parser.getOptionValue(version, 
 				Boolean.FALSE);
@@ -97,7 +107,7 @@ public class Main {
 		}
 		
 		System.out.println("port: " + portValue);
-		System.out.println("host: " + hostValue);
+		System.out.println("server: " + hostValue);
 		System.out.println("username: " + usernameValue);
 		
 		
@@ -107,6 +117,8 @@ public class Main {
 		for (int i = 0; i < otherArgs.length; i++){
 			System.out.println(otherArgs[i]);
 		}
+		
+		processCommand(otherArgs);
 		
 		System.exit(0);
 	}

@@ -67,6 +67,7 @@ public class HGDClientTestDisconnect {
 		try {
 			client.disconnect(true);
 			assertFalse("Client still connected", client.isConnected());
+			//Test the flags
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

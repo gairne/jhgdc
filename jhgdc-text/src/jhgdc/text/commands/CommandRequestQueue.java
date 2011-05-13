@@ -20,6 +20,7 @@
 
 package jhgdc.text.commands;
 
+import java.io.File;
 import java.util.List;
 
 import jhgdc.library.HGDClient;
@@ -49,15 +50,13 @@ public class CommandRequestQueue extends AbstractCommand {
 	protected void doCommand(List<String> args, HGDClient clientConnection)
 			throws Exception {
 		
+		
 		String fileName = args.get(0);
-		//Normalise the file name
 		
-		//Check if file exists
+		File file = new File(fileName);
 		
+		clientConnection.requestQueue(file);
 		
-		throw new Exception("Command not implemented!");
-		// TODO Auto-generated method stub
-
 	}
 
 }

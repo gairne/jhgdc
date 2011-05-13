@@ -20,7 +20,17 @@
 package jhgdc.text;
 
 import jargs.gnu.CmdLineParser;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import jhgdc.library.HGDClient;
 import jhgdc.library.HGDConsts;
+import jhgdc.library.JHGDException;
+import jhgdc.text.commands.AbstractCommand;
+import jhgdc.text.commands.CommandFactory;
 
 /**
  * The command line jhgdc client.
@@ -31,6 +41,21 @@ import jhgdc.library.HGDConsts;
  */
 public class Main {
 
+	//The connection with the server
+	private static HGDClient client = null;
+	
+	//The host in which we are going to connect to
+	private static String hostValue;
+	
+	//The port we are going to use
+	private static Integer portValue;
+	
+	//The username used in the connection
+	private static String usernameValue;
+	
+	//Flag for exit code
+	private static boolean exitOk = false;
+	
 	private static void printUsage() {
 		System.out.println(
 				  "Usage: java jhgdc-text [opts] command [args]\n\n"
@@ -55,14 +80,86 @@ public class Main {
 		System.out.println("jhgdc-text Version 0.1");
 	}
 	
-	private static void processCommand(String[] args) {
-		//Ask factory to create the command
+	private static void exitNicely() {
+		//close the socket
+		if (client != null ) {
+			try {
+				client.disconnect(true);	
+			} catch (Exception e) {
+				System.err.println(e.getLocalizedMessage());
+				e.printStackTrace();
+			}
+		}
 		
-		//Validate the arguments
+		//send the exit signal
+		System.exit(exitOk?0:1);
+	}
+	
+	//Ask the user password
+	private static boolean authenticate(HGDClient client, String user) {
+		String password = "";
+		//Read password
 		
-		//Execute the command
+		try {
+			client.login(user, password);
+			return true;
+		} catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	private static void processCommand(List<String> args) {
+		AbstractCommand command;
+		try{
+			//Ask factory to create the command
+			command = CommandFactory.createCommand(args.get(0));
+			
+			//Once the command object has been created, remove it from the list.
+			args.remove(0);
+			
+			//Validate the arguments
+			command.checkNumberOfArguments(args);
+			
+			//Open the connection
+			client = new HGDClient();
+			client.connect(hostValue, portValue);
+			
+			//Authenticate if necessary
+			if (command.isAuthenticationRequired() && 
+					!authenticate(client, usernameValue) ) {
+				//Fail
+				System.err.println("Login as " + usernameValue + " failed!");
+			}
+			
+			//Execute the command
+			command.execute(args, client);
+			
+		} catch (IOException ioe) {
+			System.err.println(ioe.getLocalizedMessage());
+			ioe.printStackTrace();
+			exitOk = false;
+			exitNicely();
+		} catch (IllegalStateException ise) {
+			System.err.println(ise.getLocalizedMessage());
+			ise.printStackTrace();
+			exitOk = false;
+			exitNicely();
+		} catch (JHGDException je) {
+			System.err.println(je.getLocalizedMessage());
+			je.printStackTrace();
+			exitOk = false;
+			exitNicely();
+		}
+		catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+			e.printStackTrace();
+			printUsage();
+			exitOk = false;
+			exitNicely();			
+		} 
 		
-		//Get result
 	}
 	
 	/**
@@ -86,10 +183,11 @@ public class Main {
 		}
 		
 		Boolean helpValue = (Boolean)parser.getOptionValue(help, Boolean.FALSE);
-		Integer portValue = (Integer)parser.getOptionValue(port, 
+		portValue = (Integer)parser.getOptionValue(port, 
 				new Integer(HGDConsts.DEFAULT_PORT));
-		String hostValue = (String)parser.getOptionValue(server);
-		String usernameValue = (String)parser.getOptionValue(username);
+		hostValue = (String)parser.getOptionValue(server,HGDConsts.DEFAULT_HOST);
+		usernameValue = (String)parser.getOptionValue(username, 
+				System.getProperty("user.name"));
 		Boolean versionValue = (Boolean)parser.getOptionValue(version, 
 				Boolean.FALSE);
 		
@@ -97,13 +195,15 @@ public class Main {
 		if (helpValue) {
 			System.out.println("help: " + helpValue);
 			printUsage();
-			System.exit(0);
+			exitOk = true;
+			exitNicely();
 		}
 		
 		if (versionValue) {
 			System.out.println("version: " + versionValue);
 			printVersion();
-			System.exit(0);
+			exitOk = true;
+			exitNicely();
 		}
 		
 		System.out.println("port: " + portValue);
@@ -118,9 +218,12 @@ public class Main {
 			System.out.println(otherArgs[i]);
 		}
 		
-		processCommand(otherArgs);
+		List<String> arguments = new ArrayList<String>(Arrays.asList(otherArgs));
 		
-		System.exit(0);
+		processCommand(arguments);
+		
+		exitOk = true;
+		exitNicely();
 	}
 
 }

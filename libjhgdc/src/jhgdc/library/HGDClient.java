@@ -398,7 +398,7 @@ public class HGDClient {
 		//Check we are allowed
 		String returnMessage = input.readLine();
 		if ( checkServerResponse(returnMessage) == HGDConsts.FAILURE ) {
-			throw new JHGDException(returnMessage.split("\\|")[1]);
+			throw new JHGDException(returnMessage);
 		}
 
 		//send file
@@ -406,8 +406,9 @@ public class HGDClient {
 		int bytesRead = 0;
 		while ((bytesRead = fileInput.read(buffer)) != -1 ) {
 			fileOutput.write(buffer, 0, bytesRead);
+			fileOutput.flush();
 		}
-		fileOutput.flush();
+		
 
 		//check server response
 		returnMessage = input.readLine();
@@ -486,7 +487,7 @@ public class HGDClient {
 	 * @return The corresponding return code.
 	 */
 	private int checkServerResponse(String message) {
-		if ( message.split("\\|")[0].equalsIgnoreCase("ok") ) {
+		if ( message.substring(0, 2).equalsIgnoreCase("ok") ) {
 			return HGDConsts.SUCCESS;
 		}
 		return HGDConsts.FAILURE;

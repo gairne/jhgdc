@@ -21,16 +21,18 @@
 package jhgdc.text.commands;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import jhgdc.library.HGDClient;
 
 /**
  * Class implementing the queue command.
- *
+ * 
  * @author Carlos Eduardo da Silva
  * @version 13/05/2011
- *
+ * 
  */
 public class CommandRequestQueue extends AbstractCommand {
 
@@ -43,20 +45,23 @@ public class CommandRequestQueue extends AbstractCommand {
 		this.setNumberOfArguments(1);
 	}
 
-	/* (non-Javadoc)
-	 * @see jhgdc.text.commands.AbstractCommand#doCommand(java.util.List, jhgdc.library.HGDClient)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jhgdc.text.commands.AbstractCommand#doCommand(java.util.List,
+	 * jhgdc.library.HGDClient)
 	 */
 	@Override
 	protected void doCommand(List<String> args, HGDClient clientConnection)
-			throws Exception {
-		
-		
+			throws FileNotFoundException, IllegalStateException, IOException,
+			Exception {
+
 		String fileName = args.get(0);
-		
+
 		File file = new File(fileName);
-		
+
 		clientConnection.requestQueue(file);
-		
+
 	}
 
 }

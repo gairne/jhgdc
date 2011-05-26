@@ -101,7 +101,7 @@ public class Main {
 		Console cons;
 		char[] passwd;
 		if ((cons = System.console()) != null
-				&& (passwd = cons.readPassword("[%s]", "Password for user"
+				&& (passwd = cons.readPassword("[%s]", "Password for user "
 						+ user + ":")) != null) {
 			password = new String(passwd);
 			java.util.Arrays.fill(passwd, ' ');
@@ -148,17 +148,20 @@ public class Main {
 
 		} catch (IOException ioe) {
 			System.err.println(ioe.getLocalizedMessage());
-			ioe.printStackTrace();
+			//ioe.printStackTrace();
+			printUsage();
 			exitOk = false;
 			exitNicely();
 		} catch (IllegalStateException ise) {
 			System.err.println(ise.getLocalizedMessage());
 			ise.printStackTrace();
+			printUsage();
 			exitOk = false;
 			exitNicely();
 		} catch (JHGDException je) {
 			System.err.println(je.getLocalizedMessage());
 			je.printStackTrace();
+			printUsage();
 			exitOk = false;
 			exitNicely();
 		} catch (Exception e) {

@@ -111,8 +111,8 @@ public class Main {
 			client.login(user, password);
 			return true;
 		} catch (Exception e) {
-			System.err.println(e.getLocalizedMessage());
-			e.printStackTrace();
+			//System.err.println(e.getLocalizedMessage());
+			//e.printStackTrace();
 			return false;
 		}
 	}
@@ -139,6 +139,8 @@ public class Main {
 					&& !authenticate(client, usernameValue)) {
 				// Fail
 				System.err.println("Login as " + usernameValue + " failed!");
+				exitOk = false;
+				exitNicely();
 			}
 
 			// Execute the command

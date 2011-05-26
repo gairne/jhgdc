@@ -20,9 +20,11 @@
 
 package jhgdc.text.commands;
 
+import java.io.IOException;
 import java.util.List;
 
 import jhgdc.library.HGDClient;
+import jhgdc.library.JHGDException;
 
 /**
  * Class that implements the Vote off command.
@@ -45,7 +47,7 @@ public class CommandRequestVoteOff extends AbstractCommand {
 	 */
 	@Override
 	protected void doCommand(List<String> args, HGDClient clientConnection)
-			throws Exception {
+			throws IllegalStateException, IOException, JHGDException {
 		clientConnection.requestVoteOff();
 	}
 

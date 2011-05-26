@@ -160,7 +160,7 @@ public class Main {
 			exitNicely();
 		} catch (JHGDException je) {
 			System.err.println(je.getLocalizedMessage());
-			je.printStackTrace();
+			//je.printStackTrace();
 			printUsage();
 			exitOk = false;
 			exitNicely();

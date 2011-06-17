@@ -15,15 +15,17 @@ its own README file with build and use instructions.
 Package contents
 ----------------
 
-  * libjhgdc -- The library itself
+  * libjhgdc   -- The library itself
+  * jhgdc-text -- The command line client (created to test the library)
 
+Roadmap
+-------
 
+https://github.com/kaduardo/jhgdc/issues/milestones
 
-Prerequisites
--------------
+Bugs
+----
 
-To build, you will need:
-
-  * Java SE 6
-
+Please report bugs on github:
+https://github.com/kaduardo/jhgdc/issues/
 

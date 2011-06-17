@@ -6,7 +6,6 @@ libjhgdc is a Java library client for the HGD (Hackaton Gunther Daemon).
 It can be used for implementing Java clients for the HGD.
 
 
-
 Prerequisites
 -------------
 
@@ -14,8 +13,18 @@ To build, you will need:
 
   * Java SE 6
   * JUnit 4.5 - JUnit is used for conducting unit tests, and is not 
-                needed to run thelibrary itself.
+                needed to run the library itself.
 
+Building
+--------
+
+The building system is based on Ant.
+
+The default target builds the jar file, and the API documentation.
+Available targets:
+ * compile
+ * jar
+ * javadoc
 
 Documentation
 -------------
@@ -29,9 +38,10 @@ localhost.
 Package contents
 ----------------
 
-  src/      - Source code of the library.
-  test/     - JUnit tests.
-  doc/      - API documentation.
-  classes/  - Compiled classes created by Ant.
-  lib/      - The libjhgdc jar file, once built.
+  src/            - Source code of the library.
+  test/           - JUnit tests.
+  doc/            - API documentation.
+  build/          - Build directory created by Ant.
+  build/classes/  - Compiled classes created by Ant.
+  build/jar/      - The libjhgdc jar file, once built. 
 

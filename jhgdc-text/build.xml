@@ -1,0 +1,78 @@
+<project name="jhgdc-text" default="compile" basedir=".">
+    <description>
+        jhgdc-text build file
+    </description>
+
+    <!-- set global properties for this build -->
+    <property name="src.dir"      value="src"/>
+    <property name="build.dir"    value="build"/>
+    <property name="classes.dir"  value="${build.dir}/classes"/>
+    <property name="jar.dir"      value="${build.dir}/jar"/>
+    <property name="src.version"  value="0.0-current"/>
+    <property name="lib.dir"      value="lib/"/>
+
+    <property name="main-class"   value="jhgdc.text.Main"/>
+  
+    <property name="javadoc.dir"      value="${build.dir}/doc/api"/>
+    <property name="javadoc.doctitle" value="jhgdc-text Java HGD command line client"/>
+    <property name="javadoc.bottom"   value="Copyright &amp;copy; 2011 Carlos Eduardo da Silva."/>
+    <property name="javadoc.packages" value="jhgdc"/>
+    
+
+    <path id="classpath">
+	    <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    <target name="clean" description="clean up">
+        <delete dir="${build.dir}" />
+    </target>
+
+    <target name="compile" description="compile the source">
+        <mkdir dir="${classes.dir}" />
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" 
+        	classpathref="classpath"/>
+    </target>
+
+    <target name="jar" depends="compile" 
+    	description="generate the distribution">
+        <mkdir dir="${jar.dir}"/>
+        <jar jarfile="${jar.dir}/${ant.project.name}.jar" >
+        	<fileset dir="${classes.dir}" />
+        	<restrict>
+        		<name name="**/*.class"/>
+        		<archives>
+        			<zips>
+        				<fileset dir="${lib.dir}" includes="**/*.jar"/>
+        			</zips>
+        		</archives>
+        	</restrict>
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}"/>
+			</manifest>
+		</jar>
+    </target>
+
+    <target name="run" depends="jar" description="Run the client">
+	    <java fork="true" jar="${jar.dir}/${ant.project.name}.jar">
+		    <arg line="${my.args}"/>
+	    </java>
+    </target>
+
+    <target name="clean-build" depends="clean,jar"/>
+
+
+    <target name="javadoc">
+        <mkdir dir="${javadoc.dir}"/>
+        <javadoc sourcepath="${src.dir}"
+                 protected="true"
+                 destdir="${javadoc.dir}"
+                 author="true"
+                 version="true"
+                 use="true"
+                 windowtitle="${javadoc.doctitle}"
+                 bottom="${javadoc.bottom}">
+            <package name="**.*"/>
+        </javadoc>
+    </target>
+
+</project>

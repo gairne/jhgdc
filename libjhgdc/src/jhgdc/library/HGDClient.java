@@ -149,7 +149,7 @@ public class HGDClient {
 	/**
 	 * Returns the authenticated password in case the client is authenticated.
 	 * 
-	 * @return The authentication password.
+	 * @return The authentication password, or null if not authenticated.
 	 */
 	public String getPassword() {
 		return password;
@@ -158,7 +158,7 @@ public class HGDClient {
 	/**
 	 * Returns the authentication username in case the client is authenticated.
 	 * 
-	 * @return The authentication username.
+	 * @return The authentication username, or null if not authenticated.
 	 */
 	public String getUsername() {
 		return username;
@@ -281,10 +281,10 @@ public class HGDClient {
 	 * @param username
 	 *            The username.
 	 * @param password
-	 *            The password (if none it is set to null).
-	 * @throws IllegalStateException
+	 *            The password.
+	 * @throws IllegalStateException If the client is not connected to a HGD daemon.
 	 * @throws IOException If an I/O exception occurs.
-	 * @throws JHGDException
+	 * @throws JHGDException If the username or password is null, or if the server returns a message different than ok.
 	 */
 	public void login(String username, String password)
 			throws IllegalStateException, IOException, JHGDException {
@@ -322,10 +322,16 @@ public class HGDClient {
 	}
 
 	/**
-	 * This method recovers the playlist from the daemon and returns it as an
-	 * array of string. It implements the "ls" command of the HGD protocol.
-	 * {"ls", 0, 0, hgd_req_playlist},
+	 * Recover the playlist from the daemon.
 	 * 
+	 * This method implements the "ls" command of the HGD protocol.
+	 * It recovers the playlist from the daemon and returns it as an
+	 * array of string. 
+	 * 
+	 * @return The playlist as an array of String, where each String has the following format:  <track-id>|<filename>|<artist>|<title>|<user>.
+	 *  @throws IllegalStateException If the client is not connected to a HGD daemon.
+	 * @throws IOException If an I/O exception occurs.
+	 * @throws JHGDException If the server returns a message different than ok.
 	 */
 	public String[] requestPlaylist() throws IllegalStateException,
 			IOException, JHGDException {
@@ -362,7 +368,9 @@ public class HGDClient {
 	}
 
 	/**
-	 * Gets the currently playing item, if any. This method implement the "np"
+	 * Gets the currently playing item, if any. 
+	 * 
+	 * This method implement the "np"
 	 * command of the HGD protocol.
 	 * 
 	 * @return a String in the following format:
@@ -374,8 +382,8 @@ public class HGDClient {
 	 *         remain blank.
 	 * @throws IllegalStateException
 	 *             in case the library is not connected.
-	 * @throws IOException
-	 * @throws JHGDException
+	 * @throws IOException If an I/O exception occurs.
+	 * @throws JHGDException If the server returns a message different than ok.
 	 */
 	public String requestNowPlaying() throws IllegalStateException,
 			IOException, JHGDException {
@@ -402,8 +410,8 @@ public class HGDClient {
 	 * @return The protocol major version of the daemon.
 	 * @throws IllegalStateException
 	 *             in case the library is not connected.
-	 * @throws IOException
-	 * @throws JHGDException
+	 * @throws  IOException If an I/O exception occurs.
+	 * @throws JHGDException If the server returns a message different than ok.
 	 */
 	public String requestProto() throws IllegalStateException, IOException,
 			JHGDException {
@@ -429,7 +437,6 @@ public class HGDClient {
 	 * to avoid race conditions in voting off.
 	 * This method has been maintained for testing purposes.
 	 * 
-	 * @deprecated
 	 * {"vo", 0, 1, hgd_req_vote_off},
 	 */
 	public void requestVoteOff() throws IllegalStateException, IOException,
@@ -452,15 +459,15 @@ public class HGDClient {
 	}
 
     /**
-     * Votes off the track with the playlist id <playlist-id> if and
+     * Votes off the track with the track id <track-id> if and
      only if it is now playing. 
 	 *
-     * @param playlistId The id of the playlist.
+     * @param trackId The id of the track.
      * @throws IllegalStateException
-     * @throws IOException
-     * @throws JHGDException
+     * @throws IOException If an I/O exception occurs.
+     * @throws JHGDException If the user is not authenticated, or if the server returns an error.
      */
-	public void requestVoteOff(String playlistId) throws IllegalStateException,
+	public void requestVoteOff(String trackId) throws IllegalStateException,
 			IOException, JHGDException {
 		if (!connected) {
 			throw new IllegalStateException("Client not connected");
@@ -470,7 +477,7 @@ public class HGDClient {
 			throw new IllegalStateException("Client not authenticated");
 		}
 		
-		sendLineCommand("vo|" + playlistId);
+		sendLineCommand("vo|" + trackId);
 		String returnMessage = input.readLine();
 		if (checkServerResponse(returnMessage) != HGDConsts.SUCCESS) {
 			throw new JHGDException(returnMessage.substring(returnMessage
@@ -484,6 +491,7 @@ public class HGDClient {
 	 * This method implements the "q" command of the HGD protocol.
 	 * 
 	 * {"q", 1, 1, hgd_req_queue},
+	 * @throws IOException If an I/O exception occurs.
 	 */
 	public void requestQueue(File file) throws IllegalStateException,
 			IOException, JHGDException {
@@ -541,6 +549,8 @@ public class HGDClient {
 	 */
 	/**
 	 * Opens a socket to the server
+	 * 
+	 *@throws IOException If an I/O exception occurs.
 	 */
 	private void openSocket(String host, int port) throws IOException {
 		// Debug - attempting connection
@@ -592,7 +602,8 @@ public class HGDClient {
 	 * 
 	 * @param message
 	 *            The message to be sent.
-	 * @throws IOException
+	 * @throws IllegalStateException in case the client is not connected.
+	 * @throws IOException If an I/O exception occurs.
 	 */
 	private void sendLineCommand(String message) throws IOException,
 			IllegalStateException {

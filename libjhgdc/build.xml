@@ -1,4 +1,4 @@
-<project name="libjhgdc" default="compile" basedir=".">
+<project name="libjhgdc" default="all" basedir=".">
     <description>
         libjhgdc build file
     </description>
@@ -33,7 +33,8 @@
 
     <target name="clean-build" depends="clean,jar"/>
 
-
+    <target name="all" depends="clean,jar,javadoc"/>
+	
     <target name="javadoc">
         <mkdir dir="${javadoc.dir}"/>
         <javadoc sourcepath="${src.dir}"

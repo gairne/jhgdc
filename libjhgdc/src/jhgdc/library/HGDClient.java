@@ -169,7 +169,6 @@ public class HGDClient {
 	 * 
 	 * @param host
 	 *            The host name or address of the daemon.
-	 * @return The daemon welcome message.
 	 * @throws IllegalStateException
 	 *             If the client is already connected.
 	 * @throws IOException
@@ -189,7 +188,6 @@ public class HGDClient {
 	 *            The host name or address of the daemon.
 	 * @param port
 	 *            The port listened by the daemon.
-	 * @return The daemon welcome message.
 	 * @throws IllegalStateException
 	 *             If the client is already connected.
 	 * @throws IOException

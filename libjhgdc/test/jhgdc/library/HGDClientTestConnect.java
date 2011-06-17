@@ -72,9 +72,9 @@ public class HGDClientTestConnect {
 	@Test
 	public void testConnect() {
 		try {
-			System.out.println("Returned message: " + 
-					client.connect(HGDConsts.DEFAULT_HOST) );
+			client.connect(HGDConsts.DEFAULT_HOST);
 			assertTrue(	 "The connection has not been established.", client.isConnected() );
+			System.out.println("Connection established");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Exception: " + e.getMessage());

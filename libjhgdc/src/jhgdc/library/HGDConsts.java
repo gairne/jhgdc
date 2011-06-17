@@ -33,7 +33,9 @@ public final class HGDConsts {
 	 * This class is based on hgd.h 
 	 */
 	
-	public static final String VERSION = "0.1.0"; 
+	public static final String VERSION = "0.1.0";
+	
+	public static final String PROTOCOLVERSION = "2";
 
 	/* networking */
 	public static final String DEFAULT_HOST = "127.0.0.1";

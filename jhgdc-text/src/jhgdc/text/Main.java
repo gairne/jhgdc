@@ -84,8 +84,8 @@ public class Main {
 			try {
 				client.disconnect(true);
 			} catch (Exception e) {
-				System.err.println(e.getLocalizedMessage());
-				e.printStackTrace();
+				//System.err.println(e.getLocalizedMessage());
+				//e.printStackTrace();
 			}
 		}
 
@@ -154,7 +154,7 @@ public class Main {
 			exitNicely();
 		} catch (IllegalStateException ise) {
 			System.err.println(ise.getLocalizedMessage());
-			ise.printStackTrace();
+			//ise.printStackTrace();
 			printUsage();
 			exitOk = false;
 			exitNicely();
@@ -166,7 +166,7 @@ public class Main {
 			exitNicely();
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 			printUsage();
 			exitOk = false;
 			exitNicely();
@@ -205,7 +205,7 @@ public class Main {
 		Boolean versionValue = (Boolean) parser.getOptionValue(version,
 				Boolean.FALSE);
 
-		System.out.println("Options received");
+		//System.out.println("Options received");
 		if (helpValue) {
 			System.out.println("help: " + helpValue);
 			printUsage();
@@ -220,16 +220,16 @@ public class Main {
 			exitNicely();
 		}
 
-		System.out.println("port: " + portValue);
-		System.out.println("server: " + hostValue);
-		System.out.println("username: " + usernameValue);
+		//System.out.println("port: " + portValue);
+		//System.out.println("server: " + hostValue);
+		//System.out.println("username: " + usernameValue);
 
 		// Commands
 		String[] otherArgs = parser.getRemainingArgs();
-		System.out.println("Commands received");
-		for (int i = 0; i < otherArgs.length; i++) {
-			System.out.println(otherArgs[i]);
-		}
+//		System.out.println("Commands received");
+//		for (int i = 0; i < otherArgs.length; i++) {
+//			System.out.println(otherArgs[i]);
+//		}
 
 		List<String> arguments = new ArrayList<String>(Arrays.asList(otherArgs));
 

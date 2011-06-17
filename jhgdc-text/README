@@ -1,0 +1,49 @@
+jhgdc-text - Java command line client for HGD
+=============================================
+
+jhgdc-text is a Java command line client for the HGD (Hackaton Gunther Daemon).
+
+It has been developed as an example client for the libjhgdc library.
+
+Prerequisites
+-------------
+
+To build, you will need:
+
+  * Java SE 6
+  * jargs (http://jargs.sourceforge.net/) - included 
+
+Building
+--------
+
+The building system is based on Ant.
+
+The default target builds the jar file.
+
+Available targets:
+ * compile
+ * jar
+ * clean
+
+Running
+-------
+
+Run with:
+
+java -jar jhgdc-text.jar <options> <commands>
+
+Documentation
+-------------
+
+The generated API documentation is saved in doc/api/.
+
+
+Package contents
+----------------
+
+  src/            - Source code of the client.
+  lib/            - Library folder to put the required jar files.
+  build/          - Build directory created by Ant.
+  build/classes/  - Compiled classes created by Ant.
+  build/jar/      - The libjhgdc jar file, once built. 
+

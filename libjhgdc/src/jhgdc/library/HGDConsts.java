@@ -35,7 +35,7 @@ public final class HGDConsts {
 	
 	public static final String VERSION = "0.1.0";
 	
-	public static final String PROTOCOLVERSION = "2";
+	public static final String PROTOCOLVERSION = "3";
 
 	/* networking */
 	public static final String DEFAULT_HOST = "127.0.0.1";

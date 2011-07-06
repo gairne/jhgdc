@@ -53,7 +53,7 @@ import java.net.Socket;
 public class HGDClient {
 
 	/**
-	 * The remote host name/adress of the HGD daemon.
+	 * The remote host name/address of the HGD daemon.
 	 */
 	private String host = null;
 
@@ -413,12 +413,9 @@ public class HGDClient {
 	 * @throws  IOException If an I/O exception occurs.
 	 * @throws JHGDException If the server returns a message different than ok.
 	 */
-	public String requestProto() throws IllegalStateException, IOException,
+	private String requestProto() throws IllegalStateException, IOException,
 			JHGDException {
-		if (!connected) {
-			throw new IllegalStateException("Client not connected");
-		}
-
+		
 		sendLineCommand("proto");
 		String returnMessage = (String) input.readLine();
 
@@ -607,9 +604,6 @@ public class HGDClient {
 	 */
 	private void sendLineCommand(String message) throws IOException,
 			IllegalStateException {
-		if (!connected) {
-			throw new IllegalStateException("Client not connected");
-		}
 		output.write(message + "\r");
 		output.newLine();
 		output.flush();

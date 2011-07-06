@@ -21,8 +21,11 @@
 package jhgdc.library;
 
 
+import static org.junit.Assert.*;
+
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  * This class contains the test cases of the login command.
@@ -37,6 +40,8 @@ public class HGDClientTestLogin {
 	 * The client.
 	 */
 	HGDClient client;
+	String LOGIN = "test";
+	String PASSWORD = "password";
 	
 	/**
 	 * Creates a new client, and opens a connection before execution 
@@ -60,5 +65,40 @@ public class HGDClientTestLogin {
 			client.disconnect(true);
 	}
 	
+	@Test
+	public void testLogin() throws Exception {
+		client.login(LOGIN, PASSWORD);
+		assertTrue("Client has not been authenticated.", client.isAuthenticated());
+	}
+	
+	@Test (expected=JHGDException.class)
+	public void testWrongLogin() throws Exception {
+		client.login(LOGIN+"wrong", PASSWORD);
+		fail("JHGDException expected");
+	}
+	
+	@Test (expected=JHGDException.class)
+	public void testWrongPassword() throws Exception {
+		client.login(LOGIN, PASSWORD+"wrong");
+		fail("JHGDException expected");
+	}
+	
+	@Test (expected=JHGDException.class)
+	public void testEmptyLogin() throws Exception {
+		client.login("", PASSWORD);
+		fail("JHGDException expected");
+	}
 
+	@Test (expected=JHGDException.class)
+	public void testNullLogin() throws Exception {
+		client.login(null, PASSWORD);
+		fail("JHGDException expected");
+	}
+	
+	@Test (expected=JHGDException.class)
+	public void testNullPassword() throws Exception {
+		client.login(LOGIN, null);
+		fail("JHGDException expected");
+	}
+	
 }

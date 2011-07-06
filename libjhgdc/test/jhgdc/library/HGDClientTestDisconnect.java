@@ -63,14 +63,9 @@ public class HGDClientTestDisconnect {
 	}
 
 	@Test
-	public void testDisconnect() {
-		try {
-			client.disconnect(true);
-			assertFalse("Client still connected", client.isConnected());
-			//Test the flags
-		} catch (Exception e) {
-			fail(e.getMessage());
-		}
+	public void testDisconnect() throws Exception {
+		client.disconnect(true);
+		assertFalse("Client still connected", client.isConnected());
 	}
 	
 	@Test (expected=IllegalStateException.class)

@@ -12,7 +12,7 @@
   
     <property name="javadoc.dir"      value="${build.dir}/doc/api"/>
     <property name="javadoc.doctitle" value="libjhgdc Java HGD client library"/>
-    <property name="javadoc.bottom"   value="Copyright &amp;copy; 2011 Carlos Eduardo da Silva."/>
+    <property name="javadoc.bottom"   value="Copyright &amp;copy; 2011 Carlos Eduardo da Silva, Matthew Mole."/>
     <property name="javadoc.packages" value="jhgdc"/>
     
 

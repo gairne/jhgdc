@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * This class implements a HGD client.
@@ -627,5 +628,49 @@ public class HGDClient {
 			return HGDConsts.SUCCESS;
 		}
 		return HGDConsts.FAILURE;
+	}
+	
+	/**
+	 * Parse input obtained from HGDClient.requestPlaylist() and return a populated Playlist.
+	 * Dependent on the format of result of requestPlaylist (and subsequently the protocol version)
+	 * 
+	 * @author Matthew Mole
+	 * @param inputs An array of expected format: <track-id>|<filename>|<artist>|<title>|<user>
+	 * @return A Playlist object instantiated with an ArrayList of PlaylistItems, parsed from the given input
+	 */
+	public Playlist getPlaylist() throws IllegalArgumentException, JHGDException, IOException, IllegalStateException {
+		ArrayList<PlaylistItem> items = new ArrayList<PlaylistItem>();
+		
+		for (String input : requestPlaylist()) {
+			if (input.split("|").length == 5) {
+				items.add(new PlaylistItem(input.split("|")[0], input.split("|")[1], input.split("|")[2], input.split("|")[3], input.split("|")[4]));
+			}
+			else {
+				throw new IllegalArgumentException("input incorrect format");
+			}
+		}
+		
+		return new Playlist(items);
+	}
+	
+	/**
+	 * Parse input obtained from HGDClient.requestNowPlaying() and return a populated PlaylistItem.
+	 * Dependent on the format of result of requestNowPlaying (and subsequently the protocol version)
+	 * 
+	 * @author Matthew Mole
+	 * @param input An input of expected format: ok|0 or ok|?|<track-id>|<filename>|<artist>|<title>|<user>
+	 * @return A PlaylistItem object instantiated with an current song data, parsed from the given input
+	 */
+	public PlaylistItem getCurrentPlaying() throws IllegalArgumentException, JHGDException, IOException, IllegalStateException {
+		String input = requestNowPlaying();
+		if (input.split("|").length == 2) { //ok|0 = not playing
+			return new EmptyPlaylistItem();
+		}
+		else if (input.split("|").length == 7) {
+			return new PlaylistItem(input.split("|")[2], input.split("|")[3], input.split("|")[4], input.split("|")[5], input.split("|")[6]);
+		}
+		else {
+			throw new IllegalArgumentException("input incorrect format");
+		}
 	}
 }

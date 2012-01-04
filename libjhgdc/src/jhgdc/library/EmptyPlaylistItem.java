@@ -34,7 +34,7 @@ public class EmptyPlaylistItem extends PlaylistItem {
 	 * @author Matthew Mole
 	 */
 	public EmptyPlaylistItem() {
-		super("","","","","");
+		super("","","","","","","","","","","","","","");
 	}
 	
 	@Override
@@ -59,6 +59,55 @@ public class EmptyPlaylistItem extends PlaylistItem {
 	
 	@Override
 	public String getUser() {
+		return "";
+	}
+	
+	@Override
+	public String getAlbum() {
+		return "";
+	}
+	
+	@Override
+	public String getGenre() {
+		return "";
+	}
+	
+	@Override
+	public String getDuration() {
+		return "";
+	}
+	
+	@Override
+	public String getBitrate() {
+		return "";
+	}
+	
+	@Override
+	public String getSamplerate() {
+		return "";
+	}
+	
+	@Override
+	public String getChannels() {
+		return "";
+	}
+	
+	@Override
+	public String getYear() {
+		return "";
+	}
+	
+	@Override
+	public String getVotesNeeded() {
+		return "";
+	}
+	
+	/**
+	 * 
+	 * @return "0" if the user has not voted, "1" if the user has, and "-1" if not logged in.
+	 */
+	@Override
+	public String haveVoted() {
 		return "";
 	}
 	

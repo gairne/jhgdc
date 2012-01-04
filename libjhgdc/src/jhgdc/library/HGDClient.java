@@ -50,11 +50,14 @@ import java.util.ArrayList;
  * @author Carlos Eduardo da Silva
  * @since 22/03/2011
  * 
+ * @author Matthew Mole
+ * @since 04/01/2012
+ * 
  */
 public class HGDClient {
 
 	/**
-	 * The remote host name/adress of the HGD daemon.
+	 * The remote host name/address of the HGD daemon.
 	 */
 	private String host = null;
 
@@ -329,7 +332,8 @@ public class HGDClient {
 	 * It recovers the playlist from the daemon and returns it as an
 	 * array of string. 
 	 * 
-	 * @return The playlist as an array of String, where each String has the following format:  <track-id>|<filename>|<artist>|<title>|<user>.
+	 * @return The playlist as an array of String, where each String has the following format:
+	 * 	<track-id>|<filename>|<artist>|<title>|<user>|<album>|<genre>|<duration>|<bitrate>|<samplerate>|<channels>|<year>|<votesneeded>|<voted?>.
 	 *  @throws IllegalStateException If the client is not connected to a HGD daemon.
 	 * @throws IOException If an I/O exception occurs.
 	 * @throws JHGDException If the server returns a message different than ok.
@@ -375,7 +379,7 @@ public class HGDClient {
 	 * command of the HGD protocol.
 	 * 
 	 * @return a String in the following format:
-	 *         ok|<playing?>[|<track-id>|<file‐name>|<artist>|<title>|<user>].
+	 *         ok|<playing?>[|<track-id>|<filename>|<artist>|<title>|<user>].
 	 *         If <playing?> = 0, then nothing is playing and therefore, no
 	 *         further information is available. The <artist> and <title> fields
 	 *         are generated from metadata using taglib at time of upload. If no
@@ -643,8 +647,8 @@ public class HGDClient {
 		
 		for (String input : requestPlaylist()) {
 			String[] sa = input.split("\\|");
-			if (sa.length == 5) {
-				items.add(new PlaylistItem(sa[0], sa[1], sa[2], sa[3], sa[4]));
+			if (sa.length == 14) {
+				items.add(new PlaylistItem(sa[0], sa[1], sa[2], sa[3], sa[4], sa[5], sa[6], sa[7], sa[8], sa[9], sa[10], sa[11], sa[12], sa[13]));
 			}
 			else {
 				throw new IllegalArgumentException("input incorrect format " + input);
@@ -658,20 +662,51 @@ public class HGDClient {
 	 * Parse input obtained from HGDClient.requestNowPlaying() and return a populated PlaylistItem.
 	 * Dependent on the format of result of requestNowPlaying (and subsequently the protocol version)
 	 * 
-	 * @author Matthew Mole
-	 * @param input An input of expected format: ok|0 or ok|?|<track-id>|<filename>|<artist>|<title>|<user>
-	 * @return A PlaylistItem object instantiated with an current song data, parsed from the given input
+	 * @param input
+	 *            An input of expected format: ok|0 or ok|?|<track-id>|<filename>|<artist>|<title>|<user>
+	 * @return
+	 *            A PlaylistItem object instantiated with an current song data, parsed from the given input
 	 */
-	public PlaylistItem getCurrentPlaying() throws IllegalArgumentException, JHGDException, IOException, IllegalStateException {
+	/*public PlaylistItem getCurrentPlaying() throws IllegalArgumentException, JHGDException, IOException, IllegalStateException {
 		String input = requestNowPlaying();
-		if (input.split("|").length == 2) { //ok|0 = not playing
+		if (input.split("\\|").length == 2) { //ok|0 = not playing
 			return new EmptyPlaylistItem();
 		}
-		else if (input.split("|").length == 7) {
+		else if (input.split("\\|").length == 7) {
 			return new PlaylistItem(input.split("|")[2], input.split("|")[3], input.split("|")[4], input.split("|")[5], input.split("|")[6]);
 		}
 		else {
 			throw new IllegalArgumentException("input incorrect format");
 		}
+	}*/
+	
+	/**
+	 * Request information about the currently logged in user
+	 * 
+	 * @return
+	 *            On success, returns ok|<username>|<permission_mask>|<voted?>
+	 */
+	public String requestUserInformation() throws IllegalArgumentException, JHGDException, IOException {
+		// Check if the connection is established
+		if (!connected) {
+			throw new IllegalStateException("Client not connected");
+		}
+
+		// Check authentication
+		if (!authenticated) {
+			throw new IllegalStateException("Client not authenticated");
+		}
+				
+		sendLineCommand("id");
+		
+		String returnMessage = input.readLine();
+		if (checkServerResponse(returnMessage) == HGDConsts.FAILURE) {
+			throw new JHGDException(returnMessage.substring(returnMessage
+					.indexOf('|') + 1));
+		}
+		
+		return returnMessage;
 	}
+	
+	
 }

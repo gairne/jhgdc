@@ -26,7 +26,7 @@ package jhgdc.library;
  */
 public class PlaylistItem {
 
-	private String trackId, filename, artist, title, user;
+	private String trackId, filename, artist, title, user, album, genre, duration, bitrate, samplerate, channels, year, votesneeded, voted;
 	
 	/**
 	 * @author Matthew Mole
@@ -36,16 +36,24 @@ public class PlaylistItem {
 	 * @param title The song's title
 	 * @param user The user who uploaded the file
 	 */
-	public PlaylistItem(String trackId, String filename, String artist, String title, String user) {
+	public PlaylistItem(String trackId, String filename, String artist, String title, String user, String album, String genre, String duration, String bitrate, String samplerate, String channels, String year, String votesneeded, String voted) {
 		this.trackId = trackId;
 		this.filename = filename;
 		this.artist = artist;
 		this.title = title;
 		this.user = user;
+		this.album = album;
+		this.genre = genre;
+		this.duration = duration;
+		this.bitrate = bitrate;
+		this.samplerate = samplerate;
+		this.channels = channels;
+		this.year = year;
+		this.votesneeded = votesneeded;
+		this.voted = voted;
 	}
 	
 	/**
-	 * @author Matthew Mole
 	 * @return The trackId
 	 */
 	public String getId() {
@@ -53,7 +61,6 @@ public class PlaylistItem {
 	}
 	
 	/**
-	 * @author Matthew Mole
 	 * @return The filename
 	 */
 	public String getFilename() {
@@ -61,7 +68,6 @@ public class PlaylistItem {
 	}
 	
 	/**
-	 * @author Matthew Mole
 	 * @return The artist
 	 */
 	public String getArtist() {
@@ -69,7 +75,6 @@ public class PlaylistItem {
 	}
 	
 	/**
-	 * @author Matthew Mole
 	 * @return The song title
 	 */
 	public String getTitle() {
@@ -77,15 +82,53 @@ public class PlaylistItem {
 	}
 	
 	/**
-	 * @author Matthew Mole
 	 * @return The user who enqueued the file
 	 */
 	public String getUser() {
 		return this.user;
 	}
 	
+	public String getAlbum() {
+		return this.album;
+	}
+	
+	public String getGenre() {
+		return this.genre;
+	}
+	
+	public String getDuration() {
+		return this.duration;
+	}
+	
+	public String getBitrate() {
+		return this.bitrate;
+	}
+	
+	public String getSamplerate() {
+		return this.samplerate;
+	}
+	
+	public String getChannels() {
+		return this.channels;
+	}
+	
+	public String getYear() {
+		return this.year;
+	}
+	
+	public String getVotesNeeded() {
+		return this.votesneeded;
+	}
+	
 	/**
-	 * @author Matthew Mole
+	 * 
+	 * @return "0" if the user has not voted, "1" if the user has, and "-1" if not logged in.
+	 */
+	public String haveVoted() {
+		return this.voted;
+	}
+	
+	/**
 	 * @return True if there is no current song playing
 	 */
 	public boolean isEmpty() {

@@ -416,9 +416,9 @@ public class HGDClient {
 	 */
 	public String requestProto() throws IllegalStateException, IOException,
 			JHGDException {
-		if (!connected) {
-			throw new IllegalStateException("Client not connected");
-		}
+		//if (!connected) {
+		//	throw new IllegalStateException("Client not connected");
+		//}
 
 		sendLineCommand("proto");
 		String returnMessage = (String) input.readLine();
@@ -608,9 +608,9 @@ public class HGDClient {
 	 */
 	private void sendLineCommand(String message) throws IOException,
 			IllegalStateException {
-		if (!connected) {
-			throw new IllegalStateException("Client not connected");
-		}
+		//if (!connected) {
+		//	throw new IllegalStateException("Client not connected");
+		//}
 		output.write(message + "\r");
 		output.newLine();
 		output.flush();
@@ -642,11 +642,12 @@ public class HGDClient {
 		ArrayList<PlaylistItem> items = new ArrayList<PlaylistItem>();
 		
 		for (String input : requestPlaylist()) {
-			if (input.split("|").length == 5) {
-				items.add(new PlaylistItem(input.split("|")[0], input.split("|")[1], input.split("|")[2], input.split("|")[3], input.split("|")[4]));
+			String[] sa = input.split("\\|");
+			if (sa.length == 5) {
+				items.add(new PlaylistItem(sa[0], sa[1], sa[2], sa[3], sa[4]));
 			}
 			else {
-				throw new IllegalArgumentException("input incorrect format");
+				throw new IllegalArgumentException("input incorrect format " + input);
 			}
 		}
 		

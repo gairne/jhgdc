@@ -764,9 +764,10 @@ public class HGDClient {
 			throw new IllegalStateException("Client not connected");
 		}
 		
-		input.close();
+		
 		sendLineCommand("encrypt");
 		output.close();
+		input.close();
 		fileOutput.close();
 		
 		// Create a trust manager that does not validate certificate chains like the default TrustManager

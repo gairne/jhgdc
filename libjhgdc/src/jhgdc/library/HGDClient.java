@@ -777,7 +777,7 @@ public class HGDClient {
 				}
 		};
 		SSLContext sc;
-		sc = SSLContext.getInstance("TLS");
+		sc = SSLContext.getInstance("TLSv1");
 		sc.init(null, trustAllCerts, new java.security.SecureRandom());
 		SSLSocketFactory factory = sc.getSocketFactory();
 		

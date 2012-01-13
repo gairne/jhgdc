@@ -764,7 +764,10 @@ public class HGDClient {
 			throw new IllegalStateException("Client not connected");
 		}
 		
+		input.close();
+		fileOutput.close();
 		sendLineCommand("encrypt");
+		output.close();
 		
 		// Create a trust manager that does not validate certificate chains like the default TrustManager
 		TrustManager[] trustAllCerts = new TrustManager[]{
@@ -786,6 +789,15 @@ public class HGDClient {
 		sslClientSocket.setUseClientMode(true);
 		sslClientSocket.startHandshake();
 		clientSocket = sslClientSocket;
+		
+		output = new BufferedWriter(new OutputStreamWriter(
+				clientSocket.getOutputStream()));
+		output.flush();
+
+		fileOutput = new BufferedOutputStream(clientSocket.getOutputStream());
+		
+		input = new BufferedReader(new InputStreamReader(
+				clientSocket.getInputStream()));
 		
 		String returnMessage = input.readLine();
 		if (checkServerResponse(returnMessage) == HGDConsts.FAILURE) {

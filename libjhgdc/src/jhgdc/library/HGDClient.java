@@ -30,8 +30,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import javax.net.ServerSocketFactory;
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 /**
  * This class implements a HGD client.
@@ -180,9 +186,9 @@ public class HGDClient {
 	 * @throws JHGDException
 	 *             If the connection can not be established.
 	 */
-	public void connect(String host) throws IllegalStateException,
+	public void connect(String host, boolean encrypted) throws IllegalStateException,
 			IOException, JHGDException {
-		connect(host, HGDConsts.DEFAULT_PORT);
+		connect(host, HGDConsts.DEFAULT_PORT, encrypted);
 	}
 
 	/**
@@ -199,7 +205,7 @@ public class HGDClient {
 	 * @throws JHGDException
 	 *             If the connection can not be established.
 	 */
-	public void connect(String host, int port) throws IllegalStateException,
+	public void connect(String host, int port, boolean encrypted) throws IllegalStateException,
 			IOException, JHGDException {
 		// Check if the client is already connected
 		if (connected) {
@@ -208,7 +214,7 @@ public class HGDClient {
 		}
 
 		// Open socket
-		openSocket(host, port);
+		openSocket(host, port, encrypted);
 
 		String returnMessage = (String) input.readLine();
 
@@ -379,7 +385,7 @@ public class HGDClient {
 	 * command of the HGD protocol.
 	 * 
 	 * @return a String in the following format:
-	 *         ok|<playing?>[|<track-id>|<filename>|<artist>|<title>|<user>].
+	 *         ok|<playing?>[|<track-id>|<filename>|<artist>|<title>|<user>|<album>|<genre>|<duration>|<bitrate>|<samplerate>|<channels>|<year>|<votesneeded>|<voted?>].
 	 *         If <playing?> = 0, then nothing is playing and therefore, no
 	 *         further information is available. The <artist> and <title> fields
 	 *         are generated from metadata using taglib at time of upload. If no
@@ -557,11 +563,17 @@ public class HGDClient {
 	 * 
 	 *@throws IOException If an I/O exception occurs.
 	 */
-	private void openSocket(String host, int port) throws IOException {
+	private void openSocket(String host, int port, boolean encrypted) throws IOException {
 		// Debug - attempting connection
-
-		clientSocket = new Socket(InetAddress.getByName(host), port);
-
+		
+		if (encrypted) {
+			SocketFactory sf = SSLSocketFactory.getDefault();
+			clientSocket = sf.createSocket(InetAddress.getByName(host), port);
+		}
+		else {
+			clientSocket = new Socket(InetAddress.getByName(host), port);
+		}
+			
 		output = new BufferedWriter(new OutputStreamWriter(
 				clientSocket.getOutputStream()));
 		output.flush();
@@ -667,18 +679,19 @@ public class HGDClient {
 	 * @return
 	 *            A PlaylistItem object instantiated with an current song data, parsed from the given input
 	 */
-	/*public PlaylistItem getCurrentPlaying() throws IllegalArgumentException, JHGDException, IOException, IllegalStateException {
+	public PlaylistItem getCurrentPlaying() throws IllegalArgumentException, JHGDException, IOException, IllegalStateException {
 		String input = requestNowPlaying();
+		String[] sa = input.split("\\|");
 		if (input.split("\\|").length == 2) { //ok|0 = not playing
 			return new EmptyPlaylistItem();
 		}
-		else if (input.split("\\|").length == 7) {
-			return new PlaylistItem(input.split("|")[2], input.split("|")[3], input.split("|")[4], input.split("|")[5], input.split("|")[6]);
+		else if (sa.length == 16) {
+			return new PlaylistItem(sa[2], sa[3], sa[4], sa[5], sa[6], sa[7], sa[8], sa[9], sa[10], sa[11], sa[12], sa[13], sa[14], sa[15]);
 		}
 		else {
-			throw new IllegalArgumentException("input incorrect format");
+			throw new IllegalArgumentException("input incorrect format " + input);
 		}
-	}*/
+	}
 	
 	/**
 	 * Request information about the currently logged in user
@@ -703,6 +716,57 @@ public class HGDClient {
 		if (checkServerResponse(returnMessage) == HGDConsts.FAILURE) {
 			throw new JHGDException(returnMessage.substring(returnMessage
 					.indexOf('|') + 1));
+		}
+		
+		return returnMessage;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @return
+	 *            On success, returns ok|<crypto-method>
+	 */
+	public String checkServerEncryption() throws IllegalArgumentException, JHGDException, IOException {
+		// Check if the connection is established
+		if (!connected) {
+			throw new IllegalStateException("Client not connected");
+		}
+
+		// Check authentication
+		if (!authenticated) {
+			throw new IllegalStateException("Client not authenticated");
+		}
+				
+		sendLineCommand("encrypt?");
+		
+		String returnMessage = input.readLine();
+		if (checkServerResponse(returnMessage) == HGDConsts.FAILURE) {
+			throw new JHGDException(returnMessage.substring(returnMessage
+					.indexOf('|') + 1));
+		}
+		
+		return returnMessage;
+	}
+	
+	/**
+	 * 
+	 *
+	 */
+	public String requestEncryption() throws IllegalArgumentException, JHGDException, IOException {
+		/*if (clientSocket != null) {
+			disconnect(false);
+		}*/
+		
+		sendLineCommand("encrypt");
+		
+		SSLSocketFactory sslSf = (SSLSocketFactory) SSLSocketFactory.getDefault();
+		clientSocket = sslSf.createSocket(clientSocket, getHost(), getPort(), true);
+		//sslSocket.setUseClientMode(true);
+		
+		String returnMessage = input.readLine();
+		if (checkServerResponse(returnMessage) == HGDConsts.FAILURE) {
+			throw new JHGDException(returnMessage);
 		}
 		
 		return returnMessage;

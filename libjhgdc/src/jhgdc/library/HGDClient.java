@@ -732,12 +732,7 @@ public class HGDClient {
 		if (!connected) {
 			throw new IllegalStateException("Client not connected");
 		}
-
-		// Check authentication
-		if (!authenticated) {
-			throw new IllegalStateException("Client not authenticated");
-		}
-				
+	
 		sendLineCommand("encrypt?");
 		
 		String returnMessage = input.readLine();
@@ -757,6 +752,9 @@ public class HGDClient {
 		/*if (clientSocket != null) {
 			disconnect(false);
 		}*/
+		if (!connected) {
+			throw new IllegalStateException("Client not connected");
+		}
 		
 		sendLineCommand("encrypt");
 		

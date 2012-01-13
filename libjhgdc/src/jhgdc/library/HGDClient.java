@@ -765,9 +765,9 @@ public class HGDClient {
 		}
 		
 		input.close();
-		fileOutput.close();
 		sendLineCommand("encrypt");
 		output.close();
+		fileOutput.close();
 		
 		// Create a trust manager that does not validate certificate chains like the default TrustManager
 		TrustManager[] trustAllCerts = new TrustManager[]{

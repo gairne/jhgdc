@@ -32,12 +32,17 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * This class implements a HGD client.
@@ -746,10 +751,12 @@ public class HGDClient {
 	}
 	
 	/**
+	 * @throws NoSuchAlgorithmException 
+	 * @throws KeyManagementException 
 	 * 
 	 *
 	 */
-	public String requestEncryption() throws IllegalArgumentException, JHGDException, IOException {
+	public String requestEncryption() throws IllegalArgumentException, JHGDException, IOException, NoSuchAlgorithmException, KeyManagementException {
 		/*if (clientSocket != null) {
 			disconnect(false);
 		}*/
@@ -759,8 +766,23 @@ public class HGDClient {
 		
 		sendLineCommand("encrypt");
 		
-		SSLSocketFactory sslSf = (SSLSocketFactory) SSLSocketFactory.getDefault();
-		sslClientSocket = (SSLSocket) sslSf.createSocket(clientSocket, getHost(), getPort(), true);
+		// Create a trust manager that does not validate certificate chains like the default TrustManager
+		TrustManager[] trustAllCerts = new TrustManager[]{
+				new X509TrustManager() {
+					public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+						return null;
+					}
+					public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {}
+					public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {}
+				}
+		};
+		SSLContext sc;
+		sc = SSLContext.getInstance("TLS");
+		sc.init(null, trustAllCerts, new java.security.SecureRandom());
+		SSLSocketFactory factory = sc.getSocketFactory();
+		
+		//SSLSocketFactory sslSf = (SSLSocketFactory) SSLSocketFactory.getDefault();
+		sslClientSocket = (SSLSocket) factory.createSocket(clientSocket, getHost(), getPort(), true);
 		sslClientSocket.setUseClientMode(true);
 		sslClientSocket.startHandshake();
 		clientSocket = sslClientSocket;

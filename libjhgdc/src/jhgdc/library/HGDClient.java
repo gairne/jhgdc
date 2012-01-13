@@ -111,6 +111,7 @@ public class HGDClient {
 	 * The socket.
 	 */
 	private Socket clientSocket;
+	private SSLSocket sslClientSocket;
 
 	/**
 	 * Default constructor initializes the client.
@@ -759,8 +760,10 @@ public class HGDClient {
 		sendLineCommand("encrypt");
 		
 		SSLSocketFactory sslSf = (SSLSocketFactory) SSLSocketFactory.getDefault();
-		clientSocket = sslSf.createSocket(clientSocket, getHost(), getPort(), true);
-		//sslSocket.setUseClientMode(true);
+		sslClientSocket = (SSLSocket) sslSf.createSocket(clientSocket, getHost(), getPort(), true);
+		sslClientSocket.setUseClientMode(true);
+		sslClientSocket.startHandshake();
+		clientSocket = sslClientSocket;
 		
 		String returnMessage = input.readLine();
 		if (checkServerResponse(returnMessage) == HGDConsts.FAILURE) {

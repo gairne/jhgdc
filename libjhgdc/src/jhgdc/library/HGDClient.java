@@ -44,6 +44,9 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import com.sun.xml.internal.ws.util.NoCloseInputStream;
+import com.sun.xml.internal.ws.util.NoCloseOutputStream;
+
 /**
  * This class implements a HGD client.
  * 
@@ -580,14 +583,15 @@ public class HGDClient {
 			clientSocket = new Socket(InetAddress.getByName(host), port);
 		}
 			
+		
 		output = new BufferedWriter(new OutputStreamWriter(
-				clientSocket.getOutputStream()));
+				new NoCloseOutputStream(clientSocket.getOutputStream())));
 		output.flush();
 
 		fileOutput = new BufferedOutputStream(clientSocket.getOutputStream());
 
 		input = new BufferedReader(new InputStreamReader(
-				clientSocket.getInputStream()));
+				new NoCloseInputStream(clientSocket.getInputStream())));
 
 		// Debug - done
 	}
@@ -765,10 +769,10 @@ public class HGDClient {
 		}
 		
 		
+		fileOutput.close();
+		input.close();
 		sendLineCommand("encrypt");
 		output.close();
-		input.close();
-		fileOutput.close();
 		
 		// Create a trust manager that does not validate certificate chains like the default TrustManager
 		TrustManager[] trustAllCerts = new TrustManager[]{

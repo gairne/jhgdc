@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Carlos Eduardo da Silva <kaduardo@gmail.com>
+ * Copyright (c) 2011, Carlos Eduardo da Silva <kaduardo@gmail.com>, Matthew Mole <code@gairne.co.uk>
  *
  * 
  *  This file is part of libjhgdc.

@@ -20,33 +20,49 @@
 
 package jhgdc.library;
 
+import java.io.*;
+
 /**
- * This class represents an error message returned by the hgd daemon.
+ * This class is a wrapper for an output stream.
+ * 
+ * Closing an OutputStream that is assigned to a socket
+ * will close the socket. This may be undesirable.
+ * 
+ * Instead we ignore the call to close the buffer.
+ * 
+ * @author Matthew Mole
+ * @since 21/01/2012
  *
- * @author Carlos Eduardo da Silva
- * @since 22/03/2011
  */
-public class JHGDException extends Exception {
+public class NoCloseOutputStream extends OutputStream {
 
-	public JHGDException(){
-		super();
-	}
-	
-	public JHGDException(String message) {
-		super(message);
-	}
-	
-	public JHGDException(String message, Throwable cause) {
-		super(message, cause);
-	}
-	
-	public JHGDException(Throwable cause) {
-		super(cause);
-	}
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2779009794457307771L;
+	protected OutputStream output;
 
+	public NoCloseOutputStream(OutputStream output){
+		this.output = output;
+	}
+
+	@Override
+	public void close() throws IOException {}
+
+	@Override
+	public void flush() throws IOException {
+		output.flush();
+	}
+	
+	@Override
+	public void write(byte[] b) throws IOException {
+		output.write(b);
+	}
+
+	@Override
+	public void write(byte[] b, int off, int len) throws IOException {
+		output.write(b, off, len);
+	}
+	
+	@Override
+	public void write(int b) throws IOException {
+		output.write(b);
+	}
 }
+
